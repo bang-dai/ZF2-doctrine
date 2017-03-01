@@ -1,0 +1,5 @@
+vendor/
+local.php
+index.html
+.vagrant
+.idea
