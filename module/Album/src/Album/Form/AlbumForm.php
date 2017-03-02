@@ -1,14 +1,22 @@
 <?php
 namespace Album\Form;
 
+use Doctrine\ORM\EntityManager;
 use Zend\Form\Form;
 
 class AlbumForm extends Form
 {
-    public function __construct($name = null)
+    protected $entityManager;
+
+    public function __construct(EntityManager $em)
     {
         // we want to ignore the name passed
         parent::__construct('album');
+        $this->entityManager = $em;
+    }
+
+    public function init()
+    {
         $this->setAttribute('method', 'post');
         $this->add(array(
             'name' => 'id',
@@ -18,11 +26,14 @@ class AlbumForm extends Form
         ));
         $this->add(array(
             'name' => 'artist',
-            'attributes' => array(
-                'type'  => 'text',
-            ),
+            'type' => 'DoctrineModule\Form\Element\ObjectSelect',
             'options' => array(
+                'object_manager' => $this->entityManager, //usefull when we want to call custom find method
                 'label' => 'Artist',
+                'target_class' => 'Album\Entity\Artist',
+                'property' => 'label',
+                'empty_item_label' => 'Select Artist',
+                'required' => true
             ),
         ));
         $this->add(array(

@@ -15,6 +15,13 @@ class AlbumController extends AbstractActionController
      * @var Doctrine\ORM\EntityManager
      */                
     protected $em;
+    protected $albumForm;
+
+    public function __construct(EntityManager $em, AlbumForm $albumForm)
+    {
+        $this->em = $em;
+        $this->albumForm = $albumForm;
+    }
 
     /**
      * Returns an instance of the Doctrine entity manager loaded from the service 
@@ -24,10 +31,6 @@ class AlbumController extends AbstractActionController
      */
     public function getEntityManager()
     {
-        if (null === $this->em) {
-            $this->em = $this->getServiceLocator()
-                ->get('doctrine.entitymanager.orm_default');
-        }
         return $this->em;
     }
     
@@ -47,7 +50,7 @@ class AlbumController extends AbstractActionController
 
     public function addAction()
     {
-        $form = new AlbumForm();
+        $form = $this->albumForm;
         $form->get('submit')->setValue('Add');
 
         $request = $this->getRequest();
@@ -57,10 +60,14 @@ class AlbumController extends AbstractActionController
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
-                $album->populate($form->getData());
-                $this->getEntityManager()->persist($album);
-                $this->getEntityManager()->flush();
-
+                $data = $form->getData();
+                $album->populate($data);
+                $artist = $this->getEntityManager()->getRepository('Album\Entity\Artist')->find($data['artist']);
+                if($artist){
+                    $album->setArtist($artist);
+                    $this->getEntityManager()->persist($album);
+                    $this->getEntityManager()->flush();
+                }
                 // Redirect to list of albums
                 return $this->redirect()->toRoute('album');
             }
@@ -78,7 +85,7 @@ class AlbumController extends AbstractActionController
         }
         $album = $this->getEntityManager()->find('Album\Entity\Album', $id);
 
-        $form  = new AlbumForm();
+        $form  = $this->albumForm;
         $form->bind($album);
         $form->get('submit')->setAttribute('value', 'Edit');
 

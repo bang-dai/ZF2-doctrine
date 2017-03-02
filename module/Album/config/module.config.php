@@ -3,9 +3,14 @@ namespace Album;
 
 return array(
     'controllers' => array(
-        'invokables' => array(
-            'Album\Controller\Album' => 'Album\Controller\AlbumController',
-            'Album\Controller\Artist' => 'Album\Controller\ArtistController',
+        'factories' => array(
+            'Album\Controller\Artist' => 'Album\Factory\ArtistControllerFactory',
+            'Album\Controller\Album' => 'Album\Factory\AlbumControllerFactory'
+        ),
+    ),
+    'form_elements' => array(
+        'factories' => array(
+            'Album\Form\AlbumForm' => 'Album\Factory\AlbumFormFactory'
         ),
     ),
     'router' => array(
@@ -56,7 +61,7 @@ return array(
             'orm_default' => array(
                 'drivers' => array(
                     __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
-                )
+                ),
             )
         )
     )

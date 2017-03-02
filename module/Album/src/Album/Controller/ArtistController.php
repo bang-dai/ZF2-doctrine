@@ -17,6 +17,11 @@ class ArtistController extends AbstractActionController
      */                
     protected $em;
 
+    public function __construct(EntityManager $em)
+    {
+        $this->em = $em;
+    }
+
     /**
      * Returns an instance of the Doctrine entity manager loaded from the service 
      * locator
@@ -25,10 +30,6 @@ class ArtistController extends AbstractActionController
      */
     public function getEntityManager()
     {
-        if (null === $this->em) {
-            $this->em = $this->getServiceLocator()
-                ->get('doctrine.entitymanager.orm_default');
-        }
         return $this->em;
     }
     

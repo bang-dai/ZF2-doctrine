@@ -5,6 +5,7 @@ use Album\Model\Album;
 use Album\Model\AlbumTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Mvc\MvcEvent;
 
 class Module
 {
@@ -45,4 +46,24 @@ class Module
     {
         return include __DIR__ . '/config/module.config.php';
     }
+
+    public function onBootstrap(MvcEvent $e)
+    {
+        $application = $e->getApplication();
+        $em = $application->getEventManager();
+        //handle the dispatch error (exception)
+        $em->attach(\Zend\Mvc\MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'handleError'));
+        //handle the view render error (exception)
+        $em->attach(\Zend\Mvc\MvcEvent::EVENT_RENDER_ERROR, array($this, 'handleError'));
+    }
+
+    public function handleError(MvcEvent $e)
+    {
+        //get the exception
+        $exception = $e->getParam('exception');
+        //...handle the exception... maybe log it and redirect to another page,
+        //or send an email that an exception occurred...
+        //var_dump($exception.message);
+    }
+
 }

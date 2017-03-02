@@ -29,7 +29,8 @@ class Album implements InputFilterAwareInterface
     protected $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Album\Entity\Artist", cascade={"remove"})
      */
     protected $artist;   
 
@@ -37,6 +38,18 @@ class Album implements InputFilterAwareInterface
      * @ORM\Column(type="string")
      */
     protected $title;
+
+
+    public function setArtist(Artist $artist)
+    {
+        $this->artist = $artist;
+        return $this;
+    }
+
+    public function getArtist()
+    {
+        return $this->artist;
+    }
 
     /**
      * Magic getter to expose protected properties.
@@ -78,7 +91,7 @@ class Album implements InputFilterAwareInterface
     public function populate($data = array()) 
     {
         $this->id = $data['id'];
-        $this->artist = $data['artist'];
+        //$this->artist = $data['artist'];
         $this->title = $data['title'];
     }
 
@@ -102,6 +115,7 @@ class Album implements InputFilterAwareInterface
                 ),
             )));
 
+            /*
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'artist',
                 'required' => true,
@@ -120,6 +134,7 @@ class Album implements InputFilterAwareInterface
                     ),
                 ),
             )));
+            */
 
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'title',

@@ -32,6 +32,15 @@ class Artist implements InputFilterAwareInterface
      */
     protected $label;
 
+    public function setLabel($label)
+    {
+        $this->label = $label;
+    }
+
+    public function getLabel()
+    {
+        return $this->label;
+    }
 
     /**
      * Magic getter to expose protected properties.
