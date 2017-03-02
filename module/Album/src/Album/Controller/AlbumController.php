@@ -56,18 +56,13 @@ class AlbumController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $album = new Album();
+            $form->bind($album);
             $form->setInputFilter($album->getInputFilter());
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
-                $data = $form->getData();
-                $album->populate($data);
-                $artist = $this->getEntityManager()->getRepository('Album\Entity\Artist')->find($data['artist']);
-                if($artist){
-                    $album->setArtist($artist);
-                    $this->getEntityManager()->persist($album);
-                    $this->getEntityManager()->flush();
-                }
+                $this->getEntityManager()->persist($album);
+                $this->getEntityManager()->flush();
                 // Redirect to list of albums
                 return $this->redirect()->toRoute('album');
             }
@@ -93,6 +88,7 @@ class AlbumController extends AbstractActionController
         if ($request->isPost()) {
             $form->setInputFilter($album->getInputFilter());
             $form->setData($request->getPost());
+
 
             if ($form->isValid()) {
                 $form->bindValues();

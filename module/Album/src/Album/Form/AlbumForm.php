@@ -1,8 +1,10 @@
 <?php
 namespace Album\Form;
 
+use Album\Entity\Album;
 use Doctrine\ORM\EntityManager;
 use Zend\Form\Form;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 class AlbumForm extends Form
 {
@@ -13,6 +15,7 @@ class AlbumForm extends Form
         // we want to ignore the name passed
         parent::__construct('album');
         $this->entityManager = $em;
+        $this->setHydrator(new DoctrineHydrator($em, 'Album\entity\Album'))->setObject(new Album());
     }
 
     public function init()

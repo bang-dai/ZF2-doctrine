@@ -30,7 +30,7 @@ class Album implements InputFilterAwareInterface
 
     /**
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     * @ORM\ManyToOne(targetEntity="Album\Entity\Artist", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Album\Entity\Artist")
      */
     protected $artist;   
 
@@ -49,6 +49,18 @@ class Album implements InputFilterAwareInterface
     public function getArtist()
     {
         return $this->artist;
+    }
+
+
+    public function setTitle(String $title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
     }
 
     /**
@@ -83,17 +95,6 @@ class Album implements InputFilterAwareInterface
         return get_object_vars($this);
     }
 
-    /**
-     * Populate from an array.
-     *
-     * @param array $data
-     */
-    public function populate($data = array()) 
-    {
-        $this->id = $data['id'];
-        //$this->artist = $data['artist'];
-        $this->title = $data['title'];
-    }
 
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
@@ -114,27 +115,6 @@ class Album implements InputFilterAwareInterface
                     array('name'    => 'Int'),
                 ),
             )));
-
-            /*
-            $inputFilter->add($factory->createInput(array(
-                'name'     => 'artist',
-                'required' => true,
-                'filters'  => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 100,
-                        ),
-                    ),
-                ),
-            )));
-            */
 
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'title',

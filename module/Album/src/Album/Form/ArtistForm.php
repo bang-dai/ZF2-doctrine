@@ -8,10 +8,6 @@ class ArtistForm extends Form
     public function __construct($name = null)
     {
         parent::__construct('artist');
-    }
-
-    public function init()
-    {
         $this->setAttribute('method', 'post');
         $this->add(array(
             'name' => 'id',
@@ -37,4 +33,5 @@ class ArtistForm extends Form
             ),
         ));
     }
+    
 }
