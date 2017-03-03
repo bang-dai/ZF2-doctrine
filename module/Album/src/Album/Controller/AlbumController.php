@@ -2,10 +2,13 @@
 namespace Album\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\EntityManager;
 use Album\Entity\Album;
 use Album\Form\AlbumForm;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrinePaginator;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 
 class AlbumController extends AbstractActionController
 {
@@ -41,11 +44,18 @@ class AlbumController extends AbstractActionController
      */
     public function indexAction()
     {
-        return new ViewModel(
-            array(
-                'albums' => $this->getEntityManager()->getRepository('Album\Entity\Album')->findAll() 
-            )
+        $repository = $this->getEntityManager()->getRepository('Album\Entity\Album');
+        $paginator = new Paginator(new DoctrinePaginator(new ORMPaginator($repository->createQueryBuilder('album'))));
+        $paginator->setDefaultItemCountPerPage(2);
+
+        $page = (int) $this->params()->fromQuery('page');
+        if($page)
+            $paginator->setCurrentPageNumber($page);
+
+        return new ViewModel(array(
+            'paginator' => $paginator)
         );
+
     }
 
     public function addAction()

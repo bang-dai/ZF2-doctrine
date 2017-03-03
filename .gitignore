@@ -3,3 +3,4 @@ local.php
 index.html
 .vagrant
 .idea
+phpunit.xml
