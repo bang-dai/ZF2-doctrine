@@ -4,9 +4,12 @@ namespace Album\Controller;
 use Album\Entity\Artist;
 use Album\Form\ArtistForm;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\EntityManager;
 use Album\Entity\Album;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrinePaginator;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 
 class ArtistController extends AbstractActionController
 {
@@ -16,11 +19,7 @@ class ArtistController extends AbstractActionController
      * @var Doctrine\ORM\EntityManager
      */                
     protected $em;
-
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
+    const ITEM_PER_PAGE = 5;
 
     /**
      * Returns an instance of the Doctrine entity manager loaded from the service 
@@ -30,6 +29,10 @@ class ArtistController extends AbstractActionController
      */
     public function getEntityManager()
     {
+        if (null === $this->em) {
+            $this->em = $this->getServiceLocator()
+                ->get('doctrine.entitymanager.orm_default');
+        }
         return $this->em;
     }
     
@@ -40,10 +43,16 @@ class ArtistController extends AbstractActionController
      */
     public function indexAction()
     {
-        return new ViewModel(
-            array(
-                'artists' => $this->getEntityManager()->getRepository('Album\Entity\Artist')->findAll() 
-            )
+        $repository = $this->getEntityManager()->getRepository('Album\Entity\Artist');
+        $paginator = new Paginator(new DoctrinePaginator(new ORMPaginator($repository->createQueryBuilder('artist'))));
+        $paginator->setDefaultItemCountPerPage(self::ITEM_PER_PAGE);
+
+        $page = (int) $this->params()->fromQuery('page');
+        if($page)
+            $paginator->setCurrentPageNumber($page);
+
+        return new ViewModel(array(
+                'paginator' => $paginator)
         );
     }
 

@@ -19,6 +19,7 @@ class AlbumControllerTest extends PHPUnit_Framework_TestCase
     protected $routeMatch;
     protected $event;
 
+    /*
     protected function setUp()
     {
         $serviceManager = Bootstrap::getServiceManager();
@@ -34,11 +35,7 @@ class AlbumControllerTest extends PHPUnit_Framework_TestCase
         $this->controller->setEvent($this->event);
         $this->controller->setServiceLocator($serviceManager);
     }
-    
-    public function testGetAlbumTableReturnsAnInstanceOfAlbumTable()
-    {
-        $this->assertInstanceOf('Album\Model\AlbumTable', $this->controller->getAlbumTable());
-    }
+
 
     public function testAddActionCanBeAccessed()
     {
@@ -101,4 +98,6 @@ class AlbumControllerTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(302, $response->getStatusCode());
     }
+    */
+
 }

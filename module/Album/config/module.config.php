@@ -3,9 +3,9 @@ namespace Album;
 
 return array(
     'controllers' => array(
-        'factories' => array(
-            'Album\Controller\Artist' => 'Album\Factory\ArtistControllerFactory',
-            'Album\Controller\Album' => 'Album\Factory\AlbumControllerFactory'
+        'invokables' => array(
+            'Album\Controller\Album' => 'Album\Controller\AlbumController',
+            'Album\Controller\Artist' => 'Album\Controller\ArtistController',
         ),
     ),
     'form_elements' => array(

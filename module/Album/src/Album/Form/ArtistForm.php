@@ -33,5 +33,4 @@ class ArtistForm extends Form
             ),
         ));
     }
-    
 }

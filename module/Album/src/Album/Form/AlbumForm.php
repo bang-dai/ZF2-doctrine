@@ -8,19 +8,15 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 class AlbumForm extends Form
 {
-    protected $entityManager;
+
 
     public function __construct(EntityManager $em)
     {
         // we want to ignore the name passed
         parent::__construct('album');
-        $this->entityManager = $em;
         $this->setHydrator(new DoctrineHydrator($em, 'Album\entity\Album'))->setObject(new Album());
-    }
-
-    public function init()
-    {
         $this->setAttribute('method', 'post');
+
         $this->add(array(
             'name' => 'id',
             'attributes' => array(
@@ -31,7 +27,7 @@ class AlbumForm extends Form
             'name' => 'artist',
             'type' => 'DoctrineModule\Form\Element\ObjectSelect',
             'options' => array(
-                'object_manager' => $this->entityManager, //usefull when we want to call custom find method
+                'object_manager' => $em,
                 'label' => 'Artist',
                 'target_class' => 'Album\Entity\Artist',
                 'property' => 'label',
@@ -57,4 +53,5 @@ class AlbumForm extends Form
             ),
         ));
     }
+
 }

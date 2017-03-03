@@ -18,13 +18,8 @@ class AlbumController extends AbstractActionController
      * @var Doctrine\ORM\EntityManager
      */                
     protected $em;
-    protected $albumForm;
+    const ITEM_PER_PAGE = 5;
 
-    public function __construct(EntityManager $em, AlbumForm $albumForm)
-    {
-        $this->em = $em;
-        $this->albumForm = $albumForm;
-    }
 
     /**
      * Returns an instance of the Doctrine entity manager loaded from the service 
@@ -34,6 +29,10 @@ class AlbumController extends AbstractActionController
      */
     public function getEntityManager()
     {
+        if (null === $this->em) {
+            $this->em = $this->getServiceLocator()
+                ->get('doctrine.entitymanager.orm_default');
+        }
         return $this->em;
     }
     
@@ -46,7 +45,7 @@ class AlbumController extends AbstractActionController
     {
         $repository = $this->getEntityManager()->getRepository('Album\Entity\Album');
         $paginator = new Paginator(new DoctrinePaginator(new ORMPaginator($repository->createQueryBuilder('album'))));
-        $paginator->setDefaultItemCountPerPage(2);
+        $paginator->setDefaultItemCountPerPage(self::ITEM_PER_PAGE);
 
         $page = (int) $this->params()->fromQuery('page');
         if($page)
@@ -60,7 +59,7 @@ class AlbumController extends AbstractActionController
 
     public function addAction()
     {
-        $form = $this->albumForm;
+        $form = new AlbumForm($this->getEntityManager());
         $form->get('submit')->setValue('Add');
 
         $request = $this->getRequest();
@@ -90,7 +89,7 @@ class AlbumController extends AbstractActionController
         }
         $album = $this->getEntityManager()->find('Album\Entity\Album', $id);
 
-        $form  = $this->albumForm;
+        $form  = new AlbumForm($this->getEntityManager());
         $form->bind($album);
         $form->get('submit')->setAttribute('value', 'Edit');
 
