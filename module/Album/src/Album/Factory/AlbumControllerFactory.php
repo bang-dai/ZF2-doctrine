@@ -14,8 +14,7 @@ class AlbumControllerFactory implements FactoryInterface
     {
         $services = $serviceLocator->getServiceLocator();
         $entityManager = $services->get('doctrine.entitymanager.orm_default');
-        $albumForm = $services->get('FormElementManager')->get('Album\Form\AlbumForm');
         
-        return new AlbumController($entityManager, $albumForm);
+        return new AlbumController($entityManager);
     }
 }

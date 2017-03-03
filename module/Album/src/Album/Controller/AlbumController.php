@@ -1,6 +1,7 @@
 <?php
 namespace Album\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
@@ -18,8 +19,14 @@ class AlbumController extends AbstractActionController
      * @var Doctrine\ORM\EntityManager
      */                
     protected $em;
+
     const ITEM_PER_PAGE = 5;
 
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
 
     /**
      * Returns an instance of the Doctrine entity manager loaded from the service 
@@ -29,10 +36,6 @@ class AlbumController extends AbstractActionController
      */
     public function getEntityManager()
     {
-        if (null === $this->em) {
-            $this->em = $this->getServiceLocator()
-                ->get('doctrine.entitymanager.orm_default');
-        }
         return $this->em;
     }
     
