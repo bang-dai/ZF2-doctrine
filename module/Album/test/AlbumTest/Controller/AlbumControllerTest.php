@@ -19,7 +19,7 @@ class AlbumControllerTest extends PHPUnit_Framework_TestCase
     protected $routeMatch;
     protected $event;
 
-    /*
+
     protected function setUp()
     {
         $serviceManager = Bootstrap::getServiceManager();
@@ -98,6 +98,6 @@ class AlbumControllerTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(302, $response->getStatusCode());
     }
-    */
+
 
 }

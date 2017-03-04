@@ -2,7 +2,7 @@
 namespace Album\Form;
 
 use Album\Entity\Album;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Zend\Form\Form;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
@@ -10,7 +10,7 @@ class AlbumForm extends Form
 {
 
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManagerInterface $em)
     {
         // we want to ignore the name passed
         parent::__construct('album');
